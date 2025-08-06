@@ -15,6 +15,8 @@ sslider.oninput = function() {
 
 const allEmojis = [
   {emoji: "🍎", r: 255, g: 0, b: 0},
+  {emoji: "🫐", r: 0, g: 0, b: 255},
+  {emoji: "🫑", r: 0, g: 255, b: 0},
   {emoji: "🍓", r: 220, g: 0, b: 40},
   {emoji: "🍊", r: 255, g: 165, b: 0},
   {emoji: "🍋", r: 255, g: 250, b: 50},
@@ -22,10 +24,8 @@ const allEmojis = [
   {emoji: "🥝", r: 120, g: 180, b: 40},
   {emoji: "🥦", r: 0, g: 128, b: 0},
   {emoji: "🌽", r: 255, g: 255, b: 100},
-  {emoji: "🫐", r: 0, g: 0, b: 255},
   {emoji: "🍇", r: 110, g: 0, b: 130},
   {emoji: "🍆", r: 128, g: 0, b: 128},
-  {emoji: "🫑", r: 0, g: 200, b: 0},
   {emoji: "🫒", r: 100, g: 150, b: 50},
   {emoji: "🍉", r: 255, g: 50, b: 50},
   {emoji: "🥕", r: 255, g: 140, b: 0},
@@ -43,7 +43,8 @@ const allEmojis = [
   {emoji: "🟦", r: 0, g: 0, b: 255},
   {emoji: "🟪", r: 128, g: 0, b: 128},
   {emoji: "🟧", r: 255, g: 165, b: 0},
-  {emoji: "🟥", r: 255, g: 0, b: 0}
+  {emoji: "🟥", r: 255, g: 0, b: 0},
+  {emoji: "🧊", r: 180, g: 240, b: 255},
 ];
 
 function colorDistance(a, b) {

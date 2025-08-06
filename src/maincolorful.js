@@ -1,23 +1,23 @@
 import './style.css'
 
 let curimg = new Image();
+let curscale = 10;
 
 const sslider = document.getElementById("scale")
 const sval = document.getElementById("scaleval");
 sval.innerHTML = sslider.value + "%";
 
 sslider.oninput = function() {
-  sval.innerHTML = this.value + "%";
-  if (curimg.src) load(curimg, this.value / 100);
+    curscale = this.value
+  sval.innerHTML = curscale + "%";
+  if (curimg.src) load(curimg, curscale/100 );
 }
 
-const colorEmojis = [
+const allEmojis = [
   {emoji: "🍎", r: 255, g: 0, b: 0},
   {emoji: "🍓", r: 220, g: 0, b: 40},
-//   {emoji: "🍒", r: 200, g: 0, b: 30},
   {emoji: "🍊", r: 255, g: 165, b: 0},
   {emoji: "🍋", r: 255, g: 250, b: 50},
-//   {emoji: "🍌", r: 255, g: 255, b: 0},
   {emoji: "🥭", r: 255, g: 200, b: 50},
   {emoji: "🥝", r: 120, g: 180, b: 40},
   {emoji: "🥦", r: 0, g: 128, b: 0},
@@ -30,6 +30,12 @@ const colorEmojis = [
   {emoji: "🍉", r: 255, g: 50, b: 50},
   {emoji: "🥕", r: 255, g: 140, b: 0},
   {emoji: "🤍", r: 255, g: 255, b: 255},
+  {emoji: "💛", r: 255, g: 255, b: 0},
+  {emoji: "💚", r: 0, g: 255, b: 0},
+  {emoji: "💙", r: 0, g: 0, b: 255},
+  {emoji: "💜", r: 128, g: 0, b: 128},
+  {emoji: "🖤", r: 0, g: 0, b: 0},
+  {emoji: "🤎", r: 139, g: 69, b: 19},
   {emoji: "⚫", r: 0, g: 0, b: 0},
   {emoji: "🟫", r: 150, g: 75, b: 0},
   {emoji: "🟨", r: 255, g: 255, b: 0},
@@ -37,26 +43,57 @@ const colorEmojis = [
   {emoji: "🟦", r: 0, g: 0, b: 255},
   {emoji: "🟪", r: 128, g: 0, b: 128},
   {emoji: "🟧", r: 255, g: 165, b: 0},
-  {emoji: "🟥", r: 255, g: 0, b: 0},
-  {emoji: "🟩", r: 0, g: 128, b: 0},
-  {emoji: "🟦", r: 0, g: 0, b: 255},
-  {emoji: "🟫", r: 139, g: 69, b: 19},
-  {emoji: "🟪", r: 128, g: 0, b: 128},
-  {emoji: "🟨", r: 255, g: 255, b: 0},
-  {emoji: "🟧", r: 255, g: 165, b: 0},
-//   {emoji: "🌸", r: 255, g: 182, b: 193},
-//   {emoji: "🌼", r: 255, g: 255, b: 0},
-//   {emoji: "🌻", r: 255, g: 223, b: 0},
-//   {emoji: "🌺", r: 255, g: 0, b: 127},
-//   {emoji: "🌹", r: 255, g: 0, b: 0},
-//   {emoji: "🥀", r: 200, g: 0, b: 0},
-  {emoji: "💛", r: 255, g: 255, b: 0},
-  {emoji: "💚", r: 0, g: 255, b: 0},
-  {emoji: "💙", r: 0, g: 0, b: 255},
-  {emoji: "💜", r: 128, g: 0, b: 128},
-  {emoji: "🖤", r: 0, g: 0, b: 0},
-  {emoji: "🤎", r: 139, g: 69, b: 19}
+  {emoji: "🟥", r: 255, g: 0, b: 0}
 ];
+
+function colorDistance(a, b) {
+  const dr = a.r - b.r;
+  const dg = a.g - b.g;
+  const db = a.b - b.b;
+  return Math.sqrt(dr * dr + dg * dg + db * db);
+}
+
+function pickMaxDistanceEmojis(emojis, n) {
+  if (n >= emojis.length) return emojis;
+
+  const selected = [];
+  selected.push(emojis[0]);
+
+  while (selected.length < n) {
+    let maxDist = -1;
+    let nextEmoji = null;
+
+    for (const emoji of emojis) {
+      if (selected.includes(emoji)) continue;
+
+      const minDist = Math.min(...selected.map(s => colorDistance(s, emoji)));
+
+      if (minDist > maxDist) {
+        maxDist = minDist;
+        nextEmoji = emoji;
+      }
+    }
+
+    if (nextEmoji) selected.push(nextEmoji);
+    else break;
+  }
+
+  return selected;
+}
+
+let colorEmojis = pickMaxDistanceEmojis(allEmojis, 20);
+console.log(colorEmojis.map(e => e.emoji));
+
+const cslider = document.getElementById("emoji")
+const cval = document.getElementById("eval");
+cval.innerHTML = cslider.value;
+
+cslider.oninput = function() {
+    cval.innerHTML = this.value;
+    colorEmojis = pickMaxDistanceEmojis(allEmojis, this.value);
+    console.log(colorEmojis.map(e => e.emoji));
+    if (curimg.src) load(curimg, curscale/100);
+}
 
 function closestEmoji(r, g, b, palette) {
     let closest = palette[0];
